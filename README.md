@@ -3,391 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Multi-Industry Agency Management System</title>
+    <title>Multi Agency Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-okaidia.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-jsx.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-bash.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-yaml.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-sql.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-javascript.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        .code-container {
-            max-height: none;
-            overflow: visible;
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --dark-color: #1f2937;
+            --light-color: #f3f4f6;
         }
         
-        pre[class*="language-"] {
-            max-height: none;
-            overflow: visible;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
         }
         
-        code {
-            white-space: pre-wrap;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
         
-        @media print {
-            .page-break {
-                display: none;
-            }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
         }
         
-        .nav-item {
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Custom Components */
+        .agency-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .agency-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+        }
+        
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Custom Button */
+        .custom-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .custom-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Service Tabs */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .tab {
             cursor: pointer;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
         }
         
-        .section {
-            scroll-margin-top: 80px;
+        .tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Loader */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Custom Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: var(--dark-color);
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            padding: 20px;
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #f1f1f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Sticky Header */
+        .sticky-header {
+            position: fixed;
+            top: -100px;
+            width: 100%;
+            z-index: 998;
+            transition: top 0.3s ease-in-out;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .sticky-header.active {
+            top: 0;
+        }
+        
+        /* Floating Contact Button */
+        .float-contact {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 99;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .float-contact:hover {
+            transform: scale(1.1);
+            background-color: var(--secondary-color);
+        }
+        
+        /* Dark Mode Toggle */
+        .dark-mode {
+            background-color: var(--dark-color) !important;
+            color: var(--light-color) !important;
+        }
+        
+        .dark-mode-toggle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: rotate(30deg);
+        }
+        
+        /* Custom Contact Form */
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+            outline: none;
+        }
+        
+        .form-error {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <header class="bg-indigo-800 text-white p-6 shadow-lg">
-        <h1 class="text-3xl font-bold mb-2">Multi-Industry Agency Management System</h1>
-        <p class="text-lg">Complete Implementation Guide</p>
-    </header>
-
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex flex-col md:flex-row">
-            <nav class="sticky top-0 md:w-1/4 p-4 bg-white rounded shadow-md h-auto">
-                <h2 class="text-xl font-bold mb-4 text-indigo-700">Contents</h2>
-                <ul class="space-y-2 mb-6">
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('introduction').scrollIntoView({behavior: 'smooth'})">1. Introduction</li>
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('system-architecture').scrollIntoView({behavior: 'smooth'})">2. System Architecture</li>
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('setup').scrollIntoView({behavior: 'smooth'})">3. Setup & Installation</li>
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('core-components').scrollIntoView({behavior: 'smooth'})">4. Core Components</li>
-                    <li class="nav-item hover:text-indigo-600">5. Industry Implementations</li>
-                    <ul class="pl-4 space-y-1 mt-1">
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('real-estate').scrollIntoView({behavior: 'smooth'})">5.1 Real Estate</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('healthcare').scrollIntoView({behavior: 'smooth'})">5.2 Healthcare</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('education').scrollIntoView({behavior: 'smooth'})">5.3 Education</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('hospitality').scrollIntoView({behavior: 'smooth'})">5.4 Hospitality</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('transportation').scrollIntoView({behavior: 'smooth'})">5.5 Transportation</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('tourism').scrollIntoView({behavior: 'smooth'})">5.6 Tourism</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('arts').scrollIntoView({behavior: 'smooth'})">5.7 Arts & Culture</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('industrial').scrollIntoView({behavior: 'smooth'})">5.8 Industrial</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('retail-food').scrollIntoView({behavior: 'smooth'})">5.9 Retail & Food</li>
-                        <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('tech').scrollIntoView({behavior: 'smooth'})">5.10 Advanced Technologies</li>
-                    </ul>
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('deployment').scrollIntoView({behavior: 'smooth'})">6. Deployment</li>
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('api-docs').scrollIntoView({behavior: 'smooth'})">7. API Documentation</li>
-                    <li class="nav-item hover:text-indigo-600" onclick="document.getElementById('troubleshooting').scrollIntoView({behavior: 'smooth'})">8. Troubleshooting</li>
-                </ul>
+<body class="font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 md:px-6 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold text-blue-600">
+                    <span class="text-green-500">Multi</span>Agency
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-700 hover:text-blue-600 transition-colors">Home</a>
+                <div class="relative group">
+                    <a href="#agencies" class="text-gray-700 hover:text-blue-600 transition-colors">Agencies</a>
+                    <div class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md p-2 hidden group-hover:block z-10">
+                        <a href="#travel" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-md">Travel Agency</a>
+                        <a href="#real-estate" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-md">Real Estate</a>
+                        <a href="#insurance" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-md">Insurance</a>
+                        <a href="#marketing" class="block px-4 py-2 text-gray-700 hover:bg-blue-100 rounded-md">Marketing</a>
+                    </div>
+                </div>
+                <a href="#services" class="text-gray-700 hover:text-blue-600 transition-colors">Services</a>
+                <a href="#testimonials" class="text-gray-700 hover:text-blue-600 transition-colors">Testimonials</a>
+                <a href="#about" class="text-gray-700 hover:text-blue-600 transition-colors">About</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
             </nav>
-
-            <main class="md:w-3/4 md:pl-8">
-                <section id="introduction" class="section mb-10 bg-white p-6 rounded shadow-md">
-                    <h2 class="text-2xl font-bold mb-4 text-indigo-700">1. Introduction</h2>
-                    <p class="mb-4">This document provides a comprehensive implementation of a multi-industry agency management system built with Django (backend), React.js (frontend), PostgreSQL (database), and various integrations including AI/ML and blockchain where applicable. The system is designed to be modular, allowing you to implement the specific industries you need.</p>
-                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-                        <p class="font-medium">The complete codebase is organized by:</p>
-                        <ul class="list-disc pl-5 mt-2">
-                            <li>Core system components (shared across all industries)</li>
-                            <li>Industry-specific modules</li>
-                            <li>Integration components (AI/ML, blockchain, etc.)</li>
-                            <li>Deployment configurations</li>
-                        </ul>
+            
+            <div class="flex items-center space-x-4">
+                <div class="dark-mode-toggle hidden md:block">
+                    <i class="fas fa-moon text-gray-700 text-xl"></i>
+                </div>
+                <a href="#login" class="hidden md:block custom-btn">Login / Register</a>
+                <div class="md:hidden hamburger-menu cursor-pointer">
+                    <i class="fas fa-bars text-gray-700 text-2xl"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Sticky Header (appears on scroll) -->
+    <header class="sticky-header">
+        <div class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <div class="text-xl font-bold text-blue-600">
+                <span class="text-green-500">Multi</span>Agency
+            </div>
+            
+            <nav class="hidden md:flex space-x-6">
+                <a href="#home" class="text-gray-700 hover:text-blue-600 transition-colors">Home</a>
+                <a href="#agencies" class="text-gray-700 hover:text-blue-600 transition-colors">Agencies</a>
+                <a href="#services" class="text-gray-700 hover:text-blue-600 transition-colors">Services</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+            </nav>
+            
+            <div class="flex items-center">
+                <a href="#login" class="hidden md:block custom-btn text-sm py-2 px-4">Login</a>
+                <div class="md:hidden hamburger-menu cursor-pointer">
+                    <i class="fas fa-bars text-gray-700 text-2xl"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div class="overlay"></div>
+    <div class="mobile-menu">
+        <div class="flex justify-between items-center mb-8">
+            <div class="text-xl font-bold text-white">
+                <span class="text-green-400">Multi</span>Agency
+            </div>
+            <div class="close-menu cursor-pointer">
+                <i class="fas fa-times text-white text-2xl"></i>
+            </div>
+        </div>
+        
+        <nav class="flex flex-col space-y-4">
+            <a href="#home" class="text-white hover:text-blue-300 transition-colors py-2 border-b border-gray-700">Home</a>
+            
+            <div class="mobile-dropdown">
+                <div class="flex justify-between items-center text-white hover:text-blue-300 transition-colors py-2 border-b border-gray-700">
+                    <span>Agencies</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="mobile-dropdown-content hidden pl-4 mt-2 space-y-2">
+                    <a href="#travel" class="block text-gray-300 hover:text-blue-300 py-2">Travel Agency</a>
+                    <a href="#real-estate" class="block text-gray-300 hover:text-blue-300 py-2">Real Estate</a>
+                    <a href="#insurance" class="block text-gray-300 hover:text-blue-300 py-2">Insurance</a>
+                    <a href="#marketing" class="block text-gray-300 hover:text-blue-300 py-2">Marketing</a>
+                </div>
+            </div>
+            
+            <a href="#services" class="text-white hover:text-blue-300 transition-colors py-2 border-b border-gray-700">Services</a>
+            <a href="#testimonials" class="text-white hover:text-blue-300 transition-colors py-2 border-b border-gray-700">Testimonials</a>
+            <a href="#about" class="text-white hover:text-blue-300 transition-colors py-2 border-b border-gray-700">About</a>
+            <a href="#contact" class="text-white hover:text-blue-300 transition-colors py-2 border-b border-gray-700">Contact</a>
+        </nav>
+        
+        <div class="mt-8">
+            <a href="#login" class="block w-full custom-btn text-center">Login / Register</a>
+        </div>
+        
+        <div class="mt-8 flex justify-center">
+            <div class="dark-mode-toggle-mobile text-white">
+                <i class="fas fa-moon text-xl"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="py-20 bg-gradient-to-br from-blue-50 to-green-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 fade-in">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Your One-Stop <span class="text-blue-600">Multi-Agency</span> Platform</h1>
+                    <p class="text-lg text-gray-600 mb-8">Access multiple agency services in one place - travel, real estate, insurance, and marketing solutions tailored to your needs.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#agencies" class="custom-btn">Explore Agencies</a>
+                        <a href="#contact" class="bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50 transition-colors py-3 px-6 rounded-full font-semibold text-center">Contact Us</a>
                     </div>
-                </section>
-
-                <section id="system-architecture" class="section mb-10 bg-white p-6 rounded shadow-md">
-                    <h2 class="text-2xl font-bold mb-4 text-indigo-700">2. System Architecture</h2>
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">2.1 Technology Stack</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-blue-50 p-4 rounded">
-                                <h4 class="font-bold text-blue-700">Backend</h4>
-                                <ul class="list-disc pl-5">
-                                    <li>Django 4.2+ / Django REST Framework</li>
-                                    <li>PostgreSQL (primary database)</li>
-                                    <li>Redis (caching, real-time features)</li>
-                                    <li>Celery (background tasks)</li>
-                                    <li>JWT Authentication</li>
-                                </ul>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded">
-                                <h4 class="font-bold text-green-700">Frontend</h4>
-                                <ul class="list-disc pl-5">
-                                    <li>React.js 18+</li>
-                                    <li>Next.js 13+ (SSR capabilities)</li>
-                                    <li>Redux Toolkit (state management)</li>
-                                    <li>Tailwind CSS (styling)</li>
-                                    <li>Chart.js / D3.js (visualizations)</li>
-                                </ul>
-                            </div>
-                            <div class="bg-purple-50 p-4 rounded">
-                                <h4 class="font-bold text-purple-700">Integrations</h4>
-                                <ul class="list-disc pl-5">
-                                    <li>TensorFlow/PyTorch (ML models)</li>
-                                    <li>Web3.js (blockchain integration)</li>
-                                    <li>OpenAI API (AI capabilities)</li>
-                                    <li>Stripe/PayPal (payment processing)</li>
-                                    <li>Twilio (SMS/communication)</li>
-                                </ul>
-                            </div>
-                            <div class="bg-red-50 p-4 rounded">
-                                <h4 class="font-bold text-red-700">DevOps</h4>
-                                <ul class="list-disc pl-5">
-                                    <li>Docker / Docker Compose</li>
-                                    <li>Kubernetes (orchestration)</li>
-                                    <li>AWS/GCP/Azure (cloud providers)</li>
-                                    <li>GitHub Actions (CI/CD)</li>
-                                    <li>Prometheus/Grafana (monitoring)</li>
-                                </ul>
+                </div>
+                <div class="md:w-1/2 slide-in">
+                    <div class="relative">
+                        <div class="bg-blue-600 w-72 h-72 rounded-full absolute top-4 left-4 opacity-20"></div>
+                        <div class="bg-green-600 w-72 h-72 rounded-full absolute top-0 left-0 opacity-20"></div>
+                        <div class="relative bg-white p-6 rounded-xl shadow-xl">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <i class="fas fa-plane-departure text-3xl text-blue-600 mb-2"></i>
+                                    <h3 class="font-bold text-gray-800">Travel</h3>
+                                    <p class="text-sm text-gray-600">Book flights, hotels & packages</p>
+                                </div>
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <i class="fas fa-home text-3xl text-green-600 mb-2"></i>
+                                    <h3 class="font-bold text-gray-800">Real Estate</h3>
+                                    <p class="text-sm text-gray-600">Find property & consultation</p>
+                                </div>
+                                <div class="bg-yellow-50 p-4 rounded-lg">
+                                    <i class="fas fa-shield-alt text-3xl text-yellow-600 mb-2"></i>
+                                    <h3 class="font-bold text-gray-800">Insurance</h3>
+                                    <p class="text-sm text-gray-600">Protect what matters most</p>
+                                </div>
+                                <div class="bg-purple-50 p-4 rounded-lg">
+                                    <i class="fas fa-bullhorn text-3xl text-purple-600 mb-2"></i>
+                                    <h3 class="font-bold text-gray-800">Marketing</h3>
+                                    <p class="text-sm text-gray-600">Grow your business</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">2.2 System Architecture Diagram</h3>
-                        <div class="bg-gray-100 p-4 rounded text-center">
-                            <pre class="text-xs text-left overflow-x-auto">
-+---------------------+     +---------------------+     +-----------------------+
-|                     |     |                     |     |                       |
-|  CLIENT APPLICATIONS|---->|  API GATEWAY        |---->| CORE SERVICE MODULES  |
-|  (React/Mobile)     |     |  (Django REST)      |     | - User Management     |
-|                     |<----|                     |<----| - Agency Core         |
-+---------------------+     +---------------------+     | - Common Services     |
-                                      |                 +-----------------------+
-                                      |                            |
-                             +--------v---------+                  |
-                             |                  |                  |
-                             | AUTHENTICATION   |                  |
-                             | (JWT/OAuth2)     |                  |
-                             |                  |                  |
-                             +------------------+                  |
-                                                                  |
-+------------------------+    +------------------------+    +-----v------------------+
-|                        |    |                        |    |                        |
-| INDUSTRY-SPECIFIC      |    | INTEGRATION SERVICES   |    | DATA STORAGE           |
-| MODULES                |<-->| - AI/ML                |<-->| - PostgreSQL           |
-| - Real Estate          |    | - Blockchain           |    | - Redis Cache          |
-| - Healthcare           |    | - Payment              |    | - File Storage         |
-| - Education            |    | - Communication        |    |                        |
-| - Hospitality          |    | - Analytics            |    |                        |
-| - Transportation       |    |                        |    |                        |
-| - ...more              |    |                        |    |                        |
-+------------------------+    +------------------------+    +------------------------+
-            </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Statistics -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 mb-2 counter" data-target="500">0</div>
+                    <p class="text-gray-600">Agencies</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-green-600 mb-2 counter" data-target="10000">0</div>
+                    <p class="text-gray-600">Clients Served</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-yellow-600 mb-2 counter" data-target="50">0</div>
+                    <p class="text-gray-600">Countries</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2 counter" data-target="95">0</div>
+                    <p class="text-gray-600">Satisfaction Rate</p>
+                    <span class="text-lg">%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Agency Sectors -->
+    <section id="agencies" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Our Agency Sectors</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Discover our diverse range of agency services that cater to all your personal and business needs.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Travel Agency -->
+                <div id="travel" class="agency-card bg-white">
+                    <div class="h-48 bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-plane text-white text-5xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Travel Agency</h3>
+                        <p class="text-gray-600 mb-4">Book flights, hotels, packages and tours worldwide with our premium travel services.</p>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold" id="travel-details">Learn More</a>
+                            <i class="fas fa-arrow-right text-blue-600"></i>
                         </div>
                     </div>
-                </section>
-
-                <section id="setup" class="section mb-10 bg-white p-6 rounded shadow-md">
-                    <h2 class="text-2xl font-bold mb-4 text-indigo-700">3. Setup & Installation</h2>
+                </div>
+                
+                <!-- Real Estate -->
+                <div id="real-estate" class="agency-card bg-white">
+                    <div class="h-48 bg-green-600 flex items-center justify-center">
                     
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">3.1 Prerequisites</h3>
-                        <ul class="list-disc pl-5">
-                            <li>Python 3.10+</li>
-                            <li>Node.js 16+</li>
-                            <li>PostgreSQL 14+</li>
-                            <li>Redis 6+</li>
-                            <li>Docker & Docker Compose</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">3.2 Project Setup</h3>
-                        <div class="code-container">
-                            <pre><code class="language-bash">
-# Clone the repository
-git clone https://github.com/your-org/multi-industry-agency-system.git
-cd multi-industry-agency-system
-
-# Create Python virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate  # Windows
-
-# Install backend dependencies
-pip install -r requirements.txt
-
-# Apply migrations
-python manage.py migrate
-
-# Load initial data
-python manage.py loaddata initial_data.json
-
-# Install frontend dependencies
-cd frontend
-npm install
-
-# Start development servers (in separate terminals)
-# Backend
-python manage.py runserver
-
-# Frontend
-cd frontend
-npm run dev
-
-# Or use Docker Compose to start everything
-docker-compose up
-                            </code></pre>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">3.3 Environment Configuration</h3>
-                        <p class="mb-2">Create a <code>.env</code> file in the project root:</p>
-                        <div class="code-container">
-                            <pre><code class="language-bash">
-# Django settings
-DEBUG=True
-SECRET_KEY=your-secret-key-here
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database settings
-DB_NAME=agency_management
-DB_USER=postgres
-DB_PASSWORD=your-password
-DB_HOST=localhost
-DB_PORT=5432
-
-# Redis settings
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_DB=0
-
-# Email settings
-EMAIL_HOST=smtp.example.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@example.com
-EMAIL_HOST_PASSWORD=your-email-password
-
-# Authentication
-JWT_SECRET_KEY=your-jwt-secret
-JWT_EXPIRATION_DELTA=7  # days
-
-# Third-party integrations
-OPENAI_API_KEY=your-openai-key
-STRIPE_API_KEY=your-stripe-key
-TWILIO_ACCOUNT_SID=your-twilio-sid
-TWILIO_AUTH_TOKEN=your-twilio-token
-BLOCKCHAIN_PROVIDER_URL=https://mainnet.infura.io/v3/your-infura-key
-                            </code></pre>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="core-components" class="section mb-10 bg-white p-6 rounded shadow-md">
-                    <h2 class="text-2xl font-bold mb-4 text-indigo-700">4. Core Components</h2>
-                    
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold mb-2">4.1 Core Models</h3>
-                        <p class="mb-2">The following models form the foundation of the system:</p>
-                        <div class="code-container">
-                            <pre><code class="language-python">
-# core/models.py
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _
-
-class User(AbstractUser):
-    """Extended user model with additional fields."""
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
-    
-    # Two-factor authentication
-    is_two_factor_enabled = models.BooleanField(default=False)
-    
-    # User preferences
-    notification_preferences = models.JSONField(default=dict)
-    
-    def __str__(self):
-        return self.email
-
-class Industry(models.Model):
-    """Model representing different industry types supported by the system."""
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True)
-    description = models.TextField(blank=True, null=True)
-    icon = models.CharField(max_length=50, blank=True, null=True)  # Font awesome icon name
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name_plural = "Industries"
-
-class Agency(models.Model):
-    """Main agency model that is the core of the system."""
-    name = models.CharField(max_length=255)
-    industry = models.ForeignKey(Industry, on_delete=models.PROTECT)
-    logo = models.ImageField(upload_to='agency_logos/', blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    
-    # Contact info
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    website = models.URLField(blank=True, null=True)
-    address = models.TextField()
-    
-    # Location data
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    
-    # Business details
-    registration_number = models.CharField(max_length=100, blank=True, null=True)
-    tax_id = models.CharField(max_length=100, blank=True, null=True)
-    founding_date = models.DateField(blank=True, null=True)
-    
-    # Blockchain integration
-    blockchain_address = models.CharField(max_length=100, blank=True, null=True)
-    
-    # Operational status
-    is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(default=False)
-    
-    # Timestamps
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return f"{self.name} ({self.industry.name})"
-    
-    class Meta:
-        verbose_name_plural = "Agencies"
-
-class AgencyMember(models.Model):
-    """Represents users that are members of an agency."""
-    ROLE_CHOICES = [
-        ('OWNER', 'Owner'),
-        ('ADMIN', 'Administrator'),
-        ('MANAGER', 'Manager'),
-        ('AGENT', 'Agent'),
-        ('STAFF', 'Staff'),
-    ]
-    
-    agency = models.ForeignKey(Agency, on_delete=models.CASCADE, related_name='members')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='agency_memberships')
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    title = models.CharField(max_length=100, blank=True, null=True)
-    department = models.CharField(max_length=100, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    joined_at = models.DateTimeField(auto_now_add=True)
-    
-    # Permissions
-    custom_permissions = models.JSONField(default=dict)
-    
-    def __str__(self):
-        return f"{self.user.username} - {self.role} at {self.agency.name}"
-
-class Client(models.Model):
-    """Represents clients/customers of the agencies."""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    
-    # Only required if not linked to a user account
-    name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    
-    # Optional client details
-    company_name = models.CharField(max_length=255, blank=True, nu
